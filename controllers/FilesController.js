@@ -5,6 +5,10 @@ import path from 'path';
 import dbClient from '../utils/db';
 import redisClient from '../utils/redis';
 import { ObjectId } from 'mongodb';
+import Bull from 'bull';
+
+
+const fileQueue = new Bull('fileQueue');
 
 class FilesController {
   static async postUpload(req, res) {
@@ -86,6 +90,10 @@ class FilesController {
 
     fileDocument.localPath = localPath;
     const newFile = await dbClient.db.collection('files').insertOne(fileDocument);
+
+    if (type === 'image') {
+      await fileQueue.add({ userId: user._id.toString(), fileId: newFile.insertedId });
+    }
 
     return res.status(201).json({
       id: newFile.insertedId,
