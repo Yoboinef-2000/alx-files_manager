@@ -1,7 +1,7 @@
 import express from 'express';
 import router from './routes/index'; // Import routes
-import dbClient from './utils/db'; // Import the dbClient if required
-import redisClient from './utils/redis';
+// import dbClient from './utils/db'; // Import the dbClient if required
+// import redisClient from './utils/redis';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
